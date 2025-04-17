@@ -75,6 +75,8 @@ document.getElementById('analyze-button').addEventListener('click', async () => 
         document.getElementById('text-area').value = '';
     } catch (error) {
         console.error(`AnalyzeText: Error analyzing text - ${error.message}`);
-        alert('An error occurred while analyzing the text.');
+        logger.error(`AnalyzeText: Error analyzing text - ${error.message}`);
+        
+        alert('An error occurred while analyzing the text. Try again later.');
     }
 });
