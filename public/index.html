@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Text Analyzer</h1>
+        <div id="auth-buttons">
+            <button id="login-button">Login with Google</button>
+            <button id="logout-button" style="display: none;">Logout</button>
+        </div>
+    </header>
+    <main>
+        <section id="text-input">
+            <h2>Analyze Your Text</h2>
+            <textarea id="text-area" placeholder="Enter your text here..."></textarea>
+            <button id="analyze-button">Analyze</button>
+        </section>
+        <section id="results">
+            <h2>Analysis Results</h2>
+            <ul>
+                <li>Word Count: <span id="word-count">0</span></li>
+                <li>Character Count: <span id="character-count">0</span></li>
+                <li>Sentence Count: <span id="sentence-count">0</span></li>
+                <li>Paragraph Count: <span id="paragraph-count">0</span></li>
+                <li>Longest Word: <span id="longest-word">N/A</span></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Text Analyzer</p>
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+</html>
