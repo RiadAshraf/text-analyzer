@@ -118,5 +118,7 @@ app.post('/api/texts', ensureAuthenticated, (req, res) => {
 app.use('/api', ensureAuthenticated);
 app.use('/api', textRoutes);
 
+
+
 // Export the app
 module.exports = app;

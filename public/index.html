@@ -9,11 +9,12 @@
 <body>
     <header>
         <h1>Text Analyzer</h1>
-        <div id="auth-buttons"> 
-            <button id="login-button">Login with Google</button>
-            <button id="logout-button" style="display: none;">Logout</button>
-        </div>
     </header>
+    <div id="auth-buttons">
+        <button id="login-button">Login with Google</button>
+        <button id="logout-button" style="display: none;">Logout</button>
+    </div>
+    
     <main>
         <section id="text-input">
             <h2>Analyze Your Text</h2>
@@ -31,11 +32,11 @@
             <h2>Analysis Results</h2>
             <p id="analyzed-text"><strong>Analyzed Text:</strong> No text analyzed yet.</p>
             <ul>
-                <li>Word Count: <span id="word-count">0</span></li>
-                <li>Character Count: <span id="character-count">0</span></li>
-                <li>Sentence Count: <span id="sentence-count">0</span></li>
-                <li>Paragraph Count: <span id="paragraph-count">0</span></li>
-                <li>Longest Word: <span id="longest-word">N/A</span></li>
+                <li><strong>Word Count:</strong> <span id="word-count">0</span></li>
+                <li><strong>Character Count:</strong> <span id="character-count">0</span></li>
+                <li><strong>Sentence Count:</strong> <span id="sentence-count">0</span></li>
+                <li><strong>Paragraph Count:</strong> <span id="paragraph-count">0</span></li>
+                <li><strong>Longest Word:</strong> <span id="longest-word">N/A</span></li>
             </ul>
         </section>
     </main>
