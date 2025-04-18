@@ -65,6 +65,7 @@ document.getElementById('analyze-button').addEventListener('click', async () => 
         const data = await response.json();
 
         // Update the results section with the analysis
+        document.getElementById('analyzed-text').innerHTML = `<strong>Analyzed Text:</strong> ${text}`;
         document.getElementById('word-count').textContent = data.wordCount || '0';
         document.getElementById('character-count').textContent = data.characterCount || '0';
         document.getElementById('sentence-count').textContent = data.sentenceCount || '0';
