@@ -1,9 +1,18 @@
+// Import dependencies
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const textRoutes = require('./routes/textRoutes');
 
+// Initialize the app
 const app = express();
+
+// Middleware: Parse JSON request bodies
+app.use(express.json());
+
+// Middleware: Serve static files
+app.use(express.static('public'));
 
 // Session middleware
 app.use(session({
@@ -36,6 +45,14 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
+// Middleware: Protect API routes
+const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ error: 'Unauthorized' });
+};
+
 // Google OAuth Routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
@@ -44,26 +61,6 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 }), (req, res) => {
     console.log(`User logged in: ${req.user.displayName} (${req.user.emails[0].value})`);
     res.redirect('/'); // Redirect to the frontend after login
-});
-
-// Middleware to protect API routes
-const ensureAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.status(401).json({ error: 'Unauthorized' });
-};
-
-// Endpoint to check authentication status
-app.get('/api/auth-status', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.json({
-            displayName: req.user.displayName,
-            email: req.user.emails[0].value,
-        });
-    } else {
-        res.status(401).json({ error: 'Not authenticated' });
-    }
 });
 
 // Logout route
@@ -77,6 +74,7 @@ app.post('/logout', (req, res) => {
     });
 });
 
+// Endpoint: Check authentication status
 app.get('/api/auth-status', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({
@@ -88,23 +86,37 @@ app.get('/api/auth-status', (req, res) => {
     }
 });
 
-// Protect API routes
-app.use('/api', ensureAuthenticated);
-
-// Other middleware and routes
-app.use(express.json());
-app.use(express.static('public'));
-
-// Example API route
-app.post('/api/texts', (req, res) => {
+app.post('/api/texts', ensureAuthenticated, (req, res) => {
     const { content } = req.body;
     const user = req.user.displayName; // Get the logged-in user's name
-    // Perform text analysis and return results
+
+    if (!content) {
+        return res.status(400).json({ error: 'Content is required' });
+    }
+
+    // Perform text analysis
+    const wordCount = content.split(/\s+/).filter(Boolean).length;
+    const characterCount = content.length;
+    const sentenceCount = content.split(/[.!?]+/).filter(Boolean).length;
+    const paragraphCount = content.split(/\n+/).filter(Boolean).length;
+    const longestWord = content.split(/\s+/).reduce((longest, word) => {
+        return word.length > longest.length ? word : longest;
+    }, '');
+
+    // Return all results
     res.json({
-        wordCount: content.split(/\s+/).length,
-        characterCount: content.length,
+        wordCount,
+        characterCount,
+        sentenceCount,
+        paragraphCount,
+        longestWord,
         user,
     });
 });
 
+// Register text analysis routes
+app.use('/api', ensureAuthenticated);
+app.use('/api', textRoutes);
+
+// Export the app
 module.exports = app;

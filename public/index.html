@@ -18,11 +18,18 @@
         <section id="text-input">
             <h2>Analyze Your Text</h2>
             <textarea id="text-area" placeholder="Enter your text here..."></textarea>
-            <button id="analyze-button">Analyze</button>
+            <div id="action-buttons">
+                <button id="word-count-button">Count Word</button>
+                <button id="character-count-button">Count Character</button>
+                <button id="sentence-count-button">Count Sentence</button>
+                <button id="paragraph-count-button">Count Paragraph</button>
+                <button id="longest-word-button">Longest Word</button>
+                <button id="analyze-button">Count All</button> <!-- Renamed and moved to the right -->
+            </div>
         </section>
         <section id="results">
             <h2>Analysis Results</h2>
-            <p id="analyzed-text" style="font-style: italic; color: #555;">No text analyzed yet.</p>
+            <p id="analyzed-text"><strong>Analyzed Text:</strong> No text analyzed yet.</p>
             <ul>
                 <li>Word Count: <span id="word-count">0</span></li>
                 <li>Character Count: <span id="character-count">0</span></li>

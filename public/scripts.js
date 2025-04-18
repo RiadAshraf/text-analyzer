@@ -17,6 +17,65 @@ document.getElementById('logout-button').addEventListener('click', async () => {
     }
 });
 
+// Helper function to call an API and update the result
+const callApi = async (endpoint, resultId) => {
+    const text = document.getElementById('text-area').value;
+
+    if (!text.trim()) {
+        alert('Please enter some text to analyze.');
+        return;
+    }
+
+    try {
+        console.log(`Calling API: ${endpoint} with text: "${text}"`); // Debugging log
+        
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: text }),
+        });
+
+        console.log(`Response status: ${response.status}`); // Debugging log
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data from ${endpoint}`);
+        }
+
+        const data = await response.json();
+        console.log(`Response data:`, data); // Debugging log
+
+        document.getElementById(resultId).textContent = data.result || 'N/A';
+    } catch (error) {
+        console.error(`Error calling API ${endpoint}:`, error.message);
+        alert('An error occurred while processing your request. Please try again later.');
+    }
+};
+
+
+// Event listeners for individual buttons
+document.getElementById('word-count-button').addEventListener('click', () => {
+    callApi('/api/word-count', 'word-count');
+});
+
+document.getElementById('character-count-button').addEventListener('click', () => {
+    callApi('/api/character-count', 'character-count');
+});
+
+document.getElementById('sentence-count-button').addEventListener('click', () => {
+    callApi('/api/sentence-count', 'sentence-count');
+});
+
+document.getElementById('paragraph-count-button').addEventListener('click', () => {
+    callApi('/api/paragraph-count', 'paragraph-count');
+});
+
+document.getElementById('longest-word-button').addEventListener('click', () => {
+    callApi('/api/longest-word', 'longest-word');
+});
+
+
 // Check if the user is logged in
 const checkAuthStatus = async () => {
     try {
