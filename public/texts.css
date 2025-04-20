@@ -23,6 +23,42 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Buttons inside text items */
+.text-item-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px;
+}
+
+.text-item-buttons button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Update button styling */
+.text-item-buttons .update-button {
+    background-color: #007BFF; /* Blue for update */
+    color: white;
+}
+
+.text-item-buttons .update-button:hover {
+    background-color: #0056b3;
+}
+
+/* Delete button styling */
+.text-item-buttons .delete-button {
+    background-color: #DC3545; /* Red for delete */
+    color: white;
+}
+
+.text-item-buttons .delete-button:hover {
+    background-color: #a71d2a;
+}
+
 /* Pagination controls styling */
 #pagination-controls {
     text-align: center;
