@@ -37,6 +37,40 @@ async function fetchTexts(page) {
     }
 }
 
+// Delete text function
+async function deleteText(id) {
+    if (!confirm('Are you sure you want to delete this text?')) {
+        return;
+    }
+
+    console.log('Deleting text with ID:', id);
+
+    try {
+        console.log('Sending DELETE request to server...');
+        const response = await fetch(`/api/texts-by-user/${id}`, {
+            method: 'DELETE',
+            credentials: 'include', // Include cookies for authentication
+        });
+
+        console.log('Response status:', response.status);
+        const responseBody = await response.text();
+        console.log('Response body:', responseBody);
+        if (response.status === 404) {
+            alert('Text not found or already deleted.');
+            return;
+        }
+        if (!response.ok) {
+            throw new Error('Failed to delete text.');
+        }
+
+        alert('Text deleted successfully!');
+        await fetchTexts(currentPage); // Refresh the texts
+    } catch (error) {
+        console.error('Error deleting text:', error);
+        alert('An error occurred while deleting the text !!.');
+    }
+}
+
 // Display the texts in the container
 function displayTexts(texts) {
     const container = document.getElementById('texts-container');
@@ -64,54 +98,34 @@ function displayTexts(texts) {
 
 
 // Update text function
-function updateText(id, currentContent) {
+async function updateText(id, currentContent) {
     const newContent = prompt('Update the text:', currentContent);
     if (newContent === null || newContent.trim() === '') {
         alert('Update canceled or invalid input.');
         return;
     }
-
-    fetch(`/api/texts/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: newContent }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Failed to update text.');
-            }
-            alert('Text updated successfully!');
-            fetchTexts(currentPage); // Refresh the texts
-        })
-        .catch((error) => {
-            console.error('Error updating text:', error);
-            alert('An error occurred while updating the text.');
+    console.log('Updating text with ID:', id, 'to new content:', newContent);
+    try {
+        const response = await fetch(`/api/texts-by-user/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: newContent }),
         });
+
+        if (!response.ok) {
+            throw new Error('Failed to update text.');
+        }
+        alert('Text updated successfully!');
+        await fetchTexts(currentPage); // Refresh the texts
+    } catch (error) {
+        console.error('Error updating text:', error);
+        alert('An error occurred while updating the text.');
+    }
 }
 
-// Delete text function
-function deleteText(id) {
-    if (!confirm('Are you sure you want to delete this text?')) {
-        return;
-    }
 
-    fetch(`/api/texts/${id}`, {
-        method: 'DELETE',
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Failed to delete text.');
-            }
-            alert('Text deleted successfully!');
-            fetchTexts(currentPage); // Refresh the texts
-        })
-        .catch((error) => {
-            console.error('Error deleting text:', error);
-            alert('An error occurred while deleting the text.');
-        });
-}         
 
 // Update pagination controls
 function updatePaginationControls(current, total) {

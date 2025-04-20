@@ -5,6 +5,8 @@ const textAnalysisController = require('../controllers/textAnalysisController');
 
 // Route to fetch all texts for the logged-in user with pagination
 router.get('/texts-by-user', textController.getAllTextsByUser);
+router.put('/texts-by-user/:id', textController.updateTextByUser);
+router.delete('/texts-by-user/:id', textController.deleteTextByUser);
 
 // CRUD routes for texts
 router.get('/', textController.getAllTexts);

@@ -77,6 +77,46 @@ exports.getAllTextsByUser = async (req, res) => {
     }
 };
 
+exports.updateTextByUser = async (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+    try {
+        const user = req.user.displayName; // Get the logged-in user's name
+        logger.info(`UpdateTextByUser: Updating text with ID ${id} for user ${user}`);
+        const updatedText = await textModel.updateText(id, content);
+        if (!updatedText) {
+            logger.warn(`UpdateTextByUser: Text with ID ${id} not found or not owned by user ${user}`);
+            return res.status(404).json({ error: 'Not found' });
+        }
+        logger.info(`UpdateTextByUser: Text with ID ${id} updated successfully`);
+        res.json(updatedText);
+    } catch (err) {
+        logger.error(`UpdateTextByUser: Error updating text with ID ${id} - ${err.message}`);
+        res.status(500).json({ error: 'Server error', message: err.message });
+    }
+};
+
+exports.deleteTextByUser = async (req, res) => {
+    const { id } = req.params;
+    const user = req.user.displayName; // Assuming user info is available in req.user
+
+    try {
+        logger.info(`DeleteTextByUser: Deleting text with ID ${id} for user ${user}`);
+        const deletedText = await textModel.deleteTextByUser(id, user);
+
+        if (!deletedText) {
+            logger.warn(`DeleteTextByUser: Text with ID ${id} not found or not owned by user ${user}`);
+            return res.status(404).json({ error: 'Text not found or not owned by user' });
+        }
+
+        logger.info(`DeleteTextByUser: Text with ID ${id} deleted successfully`);
+        res.json(deletedText);
+    } catch (err) {
+        logger.error(`DeleteTextByUser: Error deleting text with ID ${id} - ${err.message}`);
+        res.status(500).json({ error: 'Server error', message: err.message });
+    }
+};
+
 exports.getText = async (req, res) => {
     const { id } = req.params;
     try {
@@ -128,3 +168,4 @@ exports.deleteText = async (req, res) => {
         res.status(500).json({ error: 'Server error', message: err.message });
     }
 };
+

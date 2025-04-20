@@ -115,3 +115,24 @@ exports.deleteText = async (id) => {
         throw err;
     }
 };
+
+exports.deleteTextByUser = async (id, user) => {
+    try {
+        logger.info(`DB: DeleteTextByUser - Deleting text with ID ${id} for user ${user}`);
+        const result = await pool.query(
+            'DELETE FROM texts WHERE id = $1 RETURNING *',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            logger.warn(`DB: DeleteTextByUser - Text with ID ${id} not found or not owned by user ${user}`);
+            return null;
+        }
+
+        logger.info(`DB: DeleteTextByUser - Text with ID ${id} deleted successfully`);
+        return result.rows[0];
+    } catch (err) {
+        logger.error(`DB: DeleteTextByUser - Error deleting text with ID ${id} - ${err.message}`);
+        throw err;
+    }
+};
