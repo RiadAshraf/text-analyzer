@@ -4,6 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const textRoutes = require('./routes/textRoutes');
+const rateLimit = require('express-rate-limit');
 
 // Initialize the app
 const app = express();
@@ -13,6 +14,14 @@ app.use(express.json());
 
 // Middleware: Serve static files
 app.use(express.static('public'));
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests, please try again later.',
+});
+
+app.use('/api', limiter);
 
 // Session middleware
 app.use(session({
