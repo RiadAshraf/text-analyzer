@@ -155,21 +155,36 @@ document.getElementById('analyze-button').addEventListener('click', async () => 
     resetResults();
 
     try {
+        console.log('Starting text analysis...'); // Debugging log
+
         // Make the POST request to the backend
-        const response = await fetch('/api/texts', {
+        const response = await fetch('/api/texts/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ content: text, user: 'anonymous' }),
+            body: JSON.stringify({ content: text }),
+            credentials: 'include', // Include cookies for authentication
         });
 
+        console.log(`Response status: ${response.status}`); // Debugging log
+
+        // Try to get detailed error information if the request fails
         if (!response.ok) {
-            throw new Error('Failed to analyze text');
+            let errorMsg = 'Failed to analyze text';
+            try {
+                const errorData = await response.json();
+                console.error('Error response:', errorData);
+                errorMsg = errorData.error || errorMsg;
+            } catch (e) {
+                console.error('Could not parse error response:', e);
+            }
+            throw new Error(errorMsg);
         }
 
         // Parse the response
         const data = await response.json();
+        console.log('Response data:', data); // Debugging log
 
         // Update the results section with the analysis
         document.getElementById('analyzed-text').innerHTML = `<strong>Analyzed Text:</strong> ${text}`;
@@ -179,13 +194,16 @@ document.getElementById('analyze-button').addEventListener('click', async () => 
         document.getElementById('paragraph-count').textContent = data.paragraphCount || '0';
         document.getElementById('longest-word').textContent = data.longestWord || 'N/A';
 
+        console.log('Text analysis completed successfully.'); // Debugging log
+        alert('Text has been analyzed and saved successfully!');
+
         // Optionally clear the text area
         document.getElementById('text-area').value = '';
     } catch (error) {
         console.error(`AnalyzeText: Error analyzing text - ${error.message}`);
-        logger.error(`AnalyzeText: Error analyzing text - ${error.message}`);
-        
-        alert('An error occurred while analyzing the text. Try again later.');
+        console.log('Error occurred during text analysis.'); // Debugging log
+
+        alert(`An error occurred: ${error.message}`);
     }
 });
 

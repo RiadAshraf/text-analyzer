@@ -2,21 +2,33 @@ const textModel = require('../models/textModel');
 const logger = require('../utils/logger');
 
 exports.createText = async (req, res) => {
-    const { content, user } = req.body;
     try {
-
-        if (!content || !user) {
-            logger.warn('CreateText: Missing content or user in input');
-            return res.status(400).json({ error: 'Content and user are required' });
+        const { content } = req.body;
+        console.log('CreateText: Received content:', content);
+        
+        // Check if user information is available
+        if (!req.user || !req.user.id) {
+            console.error('CreateText: No user information in request');
+            return res.status(401).json({ error: 'User not authenticated' });
         }
-
+        
+        const user = req.user.id;
+        console.log('Creating text for user ID:', user, 'Display Name:', req.user.displayName);
+        
+        // Validate input
+        if (!content) {
+            return res.status(400).json({ error: 'Content is required' });
+        }
+        
+        // Check if content length is within reasonable limits
         if (content.length > 5000) {
-            logger.warn('CreateText: Content exceeds maximum length');
             return res.status(400).json({ error: 'Content is too long' });
         }
-        logger.info('CreateText: Inserting new text into the database');
+        
         // Create the text in the database
+        console.log('Creating text with content:', content.substring(0, 50) + '...');
         const newText = await textModel.createText(content, user);
+        console.log('Text created with ID:', newText.id);
 
         // Perform text analysis
         const wordCount = content.split(/\s+/).filter(Boolean).length;
@@ -36,7 +48,7 @@ exports.createText = async (req, res) => {
             longestWord,
         });
     } catch (err) {
-        logger.error(`CreateText: Error creating text - ${err.message}`);
+        console.error('CreateText Error:', err.message);
         res.status(500).json({ error: 'Server error', message: err.message });
     }
 };

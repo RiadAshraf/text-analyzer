@@ -2,28 +2,16 @@ const pool = require('../db/db');
 const logger = require('../utils/logger'); // Import logger
 
 exports.createText = async (content, user) => {
+    console.log(`Creating text for user: ${user}`);
     try {
-        // Validate input
-        if (!content || !user) {
-            logger.warn('DB: CreateText - Missing content or user in input');
-            throw new Error('Content and user are required');
-        }
-
-        // Check if content is too long
-        if (content.length > 5000) {
-            logger.warn('DB: CreateText - Content exceeds maximum length');
-            throw new Error('Content is too long');
-        }
-
-        logger.info('DB: CreateText - Inserting new text into the database');
         const result = await pool.query(
-            `INSERT INTO texts (content, "user") VALUES ($1, $2) RETURNING *`,
+            'INSERT INTO texts (content, "user") VALUES ($1, $2) RETURNING *',
             [content, user]
         );
-        logger.info(`DB: CreateText - New text created with ID ${result.rows[0].id}`);
+        console.log('Text saved to database with ID:', result.rows[0].id);
         return result.rows[0];
     } catch (err) {
-        logger.error(`DB: CreateText - Error creating text - ${err.message}`);
+        console.error('Error saving text to database:', err.message);
         throw err;
     }
 };

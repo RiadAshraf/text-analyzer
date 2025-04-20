@@ -3,6 +3,8 @@ const router = express.Router();
 const textController = require('../controllers/textController');
 const textAnalysisController = require('../controllers/textAnalysisController');
 
+
+router.post('/texts/create', textController.createText);
 // Route to fetch all texts for the logged-in user with pagination
 router.get('/texts-by-user', textController.getAllTextsByUser);
 router.put('/texts-by-user/:id', textController.updateTextByUser);
@@ -10,7 +12,7 @@ router.delete('/texts-by-user/:id', textController.deleteTextByUser);
 
 // CRUD routes for texts
 router.get('/', textController.getAllTexts);
-router.post('/', textController.createText);
+
 router.get('/:id', textController.getText);
 router.put('/:id', textController.updateText);
 router.delete('/:id', textController.deleteText);
