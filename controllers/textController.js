@@ -4,6 +4,18 @@ const logger = require('../utils/logger');
 exports.createText = async (req, res) => {
     const { content, user } = req.body;
     try {
+
+        if (!content || !user) {
+            logger.warn('CreateText: Missing content or user in input');
+            return res.status(400).json({ error: 'Content and user are required' });
+        }
+
+        if (content.length > 5000) {
+            logger.warn('CreateText: Content exceeds maximum length');
+            return res.status(400).json({ error: 'Content is too long' });
+        }
+        logger.info('CreateText: Inserting new text into the database');
+        // Create the text in the database
         const newText = await textModel.createText(content, user);
 
         // Perform text analysis
@@ -16,6 +28,7 @@ exports.createText = async (req, res) => {
         // Return the analysis results along with the created text
         res.status(201).json({
             id: newText.id,
+            content: newText.content,
             wordCount,
             characterCount,
             sentenceCount,

@@ -15,7 +15,9 @@ exports.getCharacterCount = (req, res) => {
     if (!content) {
         return res.status(400).json({ error: 'Content is required' });
     }
-    const characterCount = textAnalysisModel.calculateCharacterCount(content);
+    // Exclude spaces by replacing them with an empty string
+    const trimmedContent = content.replace(/\s+/g, '');
+    const characterCount = textAnalysisModel.calculateCharacterCount(trimmedContent);
     res.json({ result: characterCount });
 };
 

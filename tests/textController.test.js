@@ -16,7 +16,15 @@ app.delete('/texts/:id', textController.deleteText);
 describe('Text Controller', () => {
     describe('POST /texts', () => {
         it('should create a new text', async () => {
-            const mockText = { id: 1, content: 'Test content', user: 'Test user' };
+            const mockText = {
+                id: 1,
+                content: 'Test content',
+                characterCount: 11,
+                longestWord: 'content',
+                paragraphCount: 1,
+                sentenceCount: 1,
+                wordCount: 2,
+            };
             textModel.createText.mockResolvedValue(mockText);
 
             const response = await request(app)

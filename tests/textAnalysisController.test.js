@@ -9,82 +9,75 @@ describe('Text Analysis Controller', () => {
   });
 
   test('getWordCount should return the word count of a text', async () => {
-    const mockText = { id: 1, content: 'Hello World' };
-    textModel.getTextById.mockResolvedValue(mockText);
-
-    const req = { params: { id: 1 } };
+    const req = { body: { content: 'Hello World' } }; // Mock req.body
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
 
-    await textAnalysisController.getWordCount(req, res);
+    textAnalysisController.getWordCount(req, res);
 
-    expect(textModel.getTextById).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith({ wordCount: 2 });
+    expect(res.json).toHaveBeenCalledWith({ result: 2 });
   });
 
   test('getSentenceCount should return the sentence count of a text', async () => {
-    const mockText = { id: 1, content: 'Hello World. How are you?' };
-    textModel.getTextById.mockResolvedValue(mockText);
-  
-    const req = { params: { id: 1 } };
+    const req = { body: { content: 'Hello World. How are you?' } }; // Mock req.body
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
-  
-    await textAnalysisController.getSentenceCount(req, res);
-  
-    expect(textModel.getTextById).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith({ sentenceCount: 2 });
+
+    textAnalysisController.getSentenceCount(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ result: 2 });
   });
 
   test('getCharacterCount should return the character count of a text', async () => {
-    const mockText = { id: 1, content: 'Hello World' };
-    textModel.getTextById.mockResolvedValue(mockText);
-
-    const req = { params: { id: 1 } };
+    const req = { body: { content: 'Hello World' } }; // Mock req.body
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
 
-    await textAnalysisController.getCharacterCount(req, res);
+    textAnalysisController.getCharacterCount(req, res);
 
-    expect(textModel.getTextById).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith({ characterCount: 10 });
+    expect(res.json).toHaveBeenCalledWith({ result: 10 }); // Excludes spaces
   });
-});
 
-test('getParagraphCount should return the paragraph count of a text', async () => {
-    const mockText = { id: 1, content: 'Paragraph 1.\n\nParagraph 2.' };
-    textModel.getTextById.mockResolvedValue(mockText);
-  
-    const req = { params: { id: 1 } };
+  test('getParagraphCount should return the paragraph count of a text', async () => {
+    const req = { body: { content: 'Paragraph 1.\n\nParagraph 2.' } }; // Mock req.body
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
-  
-    await textAnalysisController.getParagraphCount(req, res);
-  
-    expect(textModel.getTextById).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith({ paragraphCount: 2 });
+
+    textAnalysisController.getParagraphCount(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ result: 2 });
   });
 
   test('getLongestWord should return the longest word in a text', async () => {
-    const mockText = { id: 1, content: 'The quick brown fox' };
-    textModel.getTextById.mockResolvedValue(mockText);
-  
-    const req = { params: { id: 1 } };
+    const req = { body: { content: 'The quick brown fox' } }; // Mock req.body
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
-  
-    await textAnalysisController.getLongestWord(req, res);
-  
-    expect(textModel.getTextById).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith({ longestWord: 'quick' });
+
+    textAnalysisController.getLongestWord(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ result: 'quick' });
   });
+
+  test('getWordCount should return 400 if content is missing', async () => {
+    const req = { body: {} }; // Missing content
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+    };
+
+    textAnalysisController.getWordCount(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Content is required' });
+  });
+});
