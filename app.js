@@ -56,6 +56,9 @@ passport.deserializeUser((user, done) => {
 
 // Middleware: Protect API routes
 const ensureAuthenticated = (req, res, next) => {
+    console.log('Authentication check:', req.isAuthenticated());
+    console.log('Session:', req.session);
+    console.log('User:', req.user);
     if (req.isAuthenticated()) {
         return next();
     }

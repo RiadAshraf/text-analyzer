@@ -1,4 +1,5 @@
 let isAuthenticated = false; // Default to false
+let loggedInUserId = null; // Store the unique user ID
 
 // Check if the user is logged in
 const checkAuthStatus = async () => {
@@ -6,7 +7,8 @@ const checkAuthStatus = async () => {
         const response = await fetch('/api/auth-status'); // Create this endpoint in the backend
         if (response.ok) {
             const user = await response.json();
-            console.log(`Logged in as: ${user.displayName}`);
+            console.log(`Logged in as: ${user.displayName} ( ID: ${user.id})`);
+            loggedInUserId = user.id; // Store the unique user ID
             document.getElementById('login-button').style.display = 'none';
             document.getElementById('logout-button').style.display = 'block';
             isAuthenticated = true; // User is logged in

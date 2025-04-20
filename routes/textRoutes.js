@@ -3,7 +3,10 @@ const router = express.Router();
 const textController = require('../controllers/textController');
 const textAnalysisController = require('../controllers/textAnalysisController');
 
+// Route to fetch all texts for the logged-in user with pagination
+router.get('/texts-by-user', textController.getAllTextsByUser);
 
+// CRUD routes for texts
 router.get('/', textController.getAllTexts);
 router.post('/', textController.createText);
 router.get('/:id', textController.getText);
@@ -23,6 +26,5 @@ router.post('/character-count', textAnalysisController.getCharacterCount);
 router.post('/sentence-count', textAnalysisController.getSentenceCount);
 router.post('/paragraph-count', textAnalysisController.getParagraphCount);
 router.post('/longest-word', textAnalysisController.getLongestWord);
-
 
 module.exports = router;

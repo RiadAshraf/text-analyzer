@@ -40,6 +40,28 @@ exports.getAllTexts = async () => {
     }
 };
 
+exports.getAllTextsByUser = async (user, limit, offset) => {
+    try {
+        logger.info(`DB: GetAllTextsByUser - Fetching texts for user ${user}`);
+        const result = await pool.query(
+            `SELECT * FROM texts ORDER BY id DESC LIMIT $1 OFFSET $2`,
+            [limit, offset]
+        );
+
+        const totalResult = await pool.query(
+            `SELECT COUNT(*) FROM texts`
+        );
+
+        return {
+            rows: result.rows,
+            rowCount: parseInt(totalResult.rows[0].count, 10),
+        };
+    } catch (err) {
+        logger.error('DB: GetAllTextsByUser - Error fetching texts:', err);
+        throw err;
+    }
+};
+
 exports.getTextById = async (id) => {
     try {
         logger.info(`DB: GetTextById - Fetching text with ID ${id}`);

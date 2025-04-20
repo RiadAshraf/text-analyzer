@@ -53,6 +53,30 @@ exports.getAllTexts = async (req, res) => {
     }
 };
 
+exports.getAllTextsByUser = async (req, res) => {
+    try {
+        const user = req.user.displayName; // Get the logged-in user's name
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const limit = parseInt(req.query.limit) || 10; // Default to 10 texts per page
+        const offset = (page - 1) * limit;
+
+        // Fetch texts with pagination
+        const { rows: texts, rowCount: totalTexts } = await textModel.getAllTextsByUser(user, limit, offset);
+
+        const totalPages = Math.ceil(totalTexts / limit);
+
+        res.json({
+            texts,
+            currentPage: page,
+            totalPages,
+            totalTexts,
+        });
+    } catch (err) {
+        console.error('Error fetching texts:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 exports.getText = async (req, res) => {
     const { id } = req.params;
     try {
