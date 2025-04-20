@@ -59,6 +59,10 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'em
 app.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/',
 }), (req, res) => {
+    if (!req.user) {
+        console.error('Authentication failed');
+        return res.redirect('/login');
+    }
     console.log(`User logged in: ${req.user.displayName} (${req.user.emails[0].value})`);
     res.redirect('/'); // Redirect to the frontend after login
 });
