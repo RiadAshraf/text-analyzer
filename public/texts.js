@@ -71,7 +71,6 @@ async function deleteText(id) {
     }
 }
 
-// Display the texts in the container
 function displayTexts(texts) {
     const container = document.getElementById('texts-container');
     container.innerHTML = ''; // Clear previous texts
@@ -84,14 +83,47 @@ function displayTexts(texts) {
     texts.forEach((text) => {
         const textElement = document.createElement('div');
         textElement.className = 'text-item';
-        textElement.innerHTML = `
-            <p><strong>ID:</strong> ${text.id}</p>
-            <p><strong>Content:</strong> ${text.content}</p>
-            <div class="text-item-buttons">
-                <button class="update-button" onclick="updateText(${text.id}, '${text.content}')">Update</button>
-                <button class="delete-button" onclick="deleteText(${text.id})">Delete</button>
-            </div>
-        `;
+        
+        // Create text content elements
+        const idParagraph = document.createElement('p');
+        idParagraph.innerHTML = `<strong>ID:</strong> ${text.id}`;
+        
+        const contentParagraph = document.createElement('p');
+        contentParagraph.innerHTML = `<strong>Content:</strong> ${text.content}`;
+        
+        // Create buttons container
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.className = 'text-item-buttons';
+        
+        // Create update button
+        const updateButton = document.createElement('button');
+        updateButton.className = 'update-button';
+        updateButton.textContent = 'Update';
+        updateButton.dataset.id = text.id;
+        updateButton.dataset.content = text.content;
+        updateButton.addEventListener('click', function() {
+            updateText(this.dataset.id, this.dataset.content);
+        });
+        
+        // Create delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.textContent = 'Delete';
+        deleteButton.dataset.id = text.id;
+        deleteButton.addEventListener('click', function() {
+            deleteText(this.dataset.id);
+        });
+        
+        // Append buttons to button container
+        buttonsDiv.appendChild(updateButton);
+        buttonsDiv.appendChild(deleteButton);
+        
+        // Append all elements to text element
+        textElement.appendChild(idParagraph);
+        textElement.appendChild(contentParagraph);
+        textElement.appendChild(buttonsDiv);
+        
+        // Append text element to container
         container.appendChild(textElement);
     });
 }
