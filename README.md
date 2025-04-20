@@ -66,6 +66,21 @@ psql -d text_analyzer -f db/schema.sql
 
 ---
 
+## Database Schema
+
+The application uses a PostgreSQL database with the following table:
+
+### Texts Table
+```sql
+CREATE TABLE texts (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  user VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 ## Running the Application
 
 1. **Start the server:**
