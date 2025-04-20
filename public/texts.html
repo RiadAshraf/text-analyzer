@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Texts</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Use shared styles -->
     <link rel="stylesheet" href="texts.css">
 </head>
 <body>
-    <h1>All Texts</h1>
+    <!-- Consistent Header -->
+    <div class="header-bar">All Texts</div>
+
+    <!-- Texts container -->
     <div id="texts-container"></div>
+
+    <!-- Pagination controls -->
     <div id="pagination-controls">
         <button id="prev-page" disabled>Previous</button>
         <span id="current-page"></span>
         <button id="next-page" disabled>Next</button>
     </div>
+
     <script src="texts.js"></script>
 </body>
 </html>

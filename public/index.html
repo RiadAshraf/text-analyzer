@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Text Analyzer</h1>
-    </header>
+    <!-- Consistent Header -->
+    <div class="header-bar">Text Analyzer</div>
+
     <div id="auth-buttons">
         <button id="login-button">Login with Google</button>
         <button id="logout-button" style="display: none;">Logout</button>
@@ -25,7 +25,6 @@
                 <button id="sentence-count-button">Count Sentence</button>
                 <button id="paragraph-count-button">Count Paragraph</button>
                 <button id="longest-word-button">Longest Word</button>
-                <button id="analyze-button">Analyze All</button>
             </div>
         </section>
         <section id="results">
@@ -41,9 +40,10 @@
         </section>
         <section id="all-texts">
             <h2>Manage Your Texts</h2>
-            <button onclick="window.location.href='/texts.html'">Show All Texts</button>
+            <button onclick="window.location.href='/texts'">Show All Texts</button>
         </section>
     </main>
+
     <footer>
         <p>&copy; 2025 Riad Ashraf</p>
     </footer>

@@ -1,23 +1,29 @@
+/* General body styling */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
 }
 
-h1 {
-    text-align: center;
-}
-
+/* Text container styling */
 #texts-container {
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 10px;
 }
 
+/* Individual text item styling */
 .text-item {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Pagination controls styling */
 #pagination-controls {
     text-align: center;
     margin-top: 20px;
@@ -27,4 +33,19 @@ h1 {
     margin: 0 5px;
     padding: 5px 10px;
     font-size: 16px;
+    background-color: #4CAF50; /* Consistent green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#pagination-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#pagination-controls span {
+    font-size: 18px;
+    font-weight: bold;
 }

@@ -5,6 +5,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const textRoutes = require('./routes/textRoutes');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 
 // Initialize the app
 const app = express();
@@ -22,6 +23,13 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+
+
+// Serve texts.html for /texts route
+app.get('/texts', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'texts.html'));
+});
 
 // Session middleware
 app.use(session({
@@ -61,6 +69,14 @@ const ensureAuthenticated = (req, res, next) => {
     console.log('User:', req.user);
     if (req.isAuthenticated()) {
         return next();
+    }    function ensureAuthenticated(req, res, next) {
+        console.log('Authentication check:', req.isAuthenticated());
+        console.log('Session:', req.session);
+        console.log('User:', req.user);
+        if (req.isAuthenticated()) {
+            return next();
+        }
+        res.status(401).json({ error: 'Unauthorized' });
     }
     res.status(401).json({ error: 'Unauthorized' });
 };
