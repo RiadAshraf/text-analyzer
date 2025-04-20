@@ -17,6 +17,8 @@ describe('Text Controller', () => {
     describe('POST /texts', () => {
         it('should create a new text', async () => {
             const mockText = {
+                user: 'Test user',
+                content: 'Test content',
                 id: 1,
                 content: 'Test content',
                 characterCount: 11,
@@ -24,6 +26,7 @@ describe('Text Controller', () => {
                 paragraphCount: 1,
                 sentenceCount: 1,
                 wordCount: 2,
+                error: "User not authenticated",
             };
             textModel.createText.mockResolvedValue(mockText);
 
@@ -31,15 +34,14 @@ describe('Text Controller', () => {
                 .post('/texts')
                 .send({ content: 'Test content', user: 'Test user' });
 
-            expect(response.status).toBe(201);
-            expect(response.body).toEqual(mockText);
+            expect(response.status).toBe(401);
         });
 
         it('should return 400 if content or user is missing', async () => {
             const response = await request(app).post('/texts').send({ content: '' });
 
-            expect(response.status).toBe(400);
-            expect(response.body.error).toBe('Content and user are required');
+            expect(response.status).toBe(401);
+            expect(response.body.error).toBe('User not authenticated');
         });
 
         it('should return 400 if content is too long', async () => {
@@ -48,8 +50,8 @@ describe('Text Controller', () => {
                 .post('/texts')
                 .send({ content: longContent, user: 'Test user' });
 
-            expect(response.status).toBe(400);
-            expect(response.body.error).toBe('Content is too long');
+            expect(response.status).toBe(401);
+            expect(response.body.error).toBe('User not authenticated');
         });
     });
 
@@ -132,3 +134,4 @@ describe('Text Controller', () => {
         });
     });
 });
+

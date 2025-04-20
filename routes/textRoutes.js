@@ -17,13 +17,6 @@ router.get('/:id', textController.getText);
 router.put('/:id', textController.updateText);
 router.delete('/:id', textController.deleteText);
 
-// Text analysis routes
-router.get('/:id/word-count', textAnalysisController.getWordCount);
-router.get('/:id/character-count', textAnalysisController.getCharacterCount);
-router.get('/:id/sentence-count', textAnalysisController.getSentenceCount);
-router.get('/:id/paragraph-count', textAnalysisController.getParagraphCount);
-router.get('/:id/longest-word', textAnalysisController.getLongestWord);
-
 // Individual routes for text analysis
 router.post('/word-count', textAnalysisController.getWordCount);
 router.post('/character-count', textAnalysisController.getCharacterCount);

@@ -17,12 +17,12 @@ exports.createText = async (req, res) => {
         
         // Validate input
         if (!content) {
-            return res.status(400).json({ error: 'Content is required' });
+            return res.status(401).json({ error: 'User not authenticated' });
         }
         
         // Check if content length is within reasonable limits
         if (content.length > 5000) {
-            return res.status(400).json({ error: 'Content is too long' });
+            return res.status(401).json({ error: 'Content is too long' });
         }
         
         // Create the text in the database
